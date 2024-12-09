@@ -2,12 +2,18 @@ package io.swagger.petstore.tests;
 
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
+import io.swagger.petstore.dtos.pet.PetJson;
+import io.swagger.petstore.dtos.pet.PetStatus;
+import io.swagger.petstore.service.Endpoint;
 import org.junit.jupiter.api.Test;
 
-import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.equalTo;
+import java.util.List;
 
-public class SimpleTests {
+import static io.restassured.RestAssured.given;
+import static io.swagger.petstore.dtos.pet.PetStatus.available;
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class SimpleTests extends TestBase {
 
     @Test
     public void getPetById() {
@@ -17,14 +23,49 @@ public class SimpleTests {
         int petId = 1;
 
         Response response = given()
-                .when()
+                .log().all()
                 .get("/pet/" + petId)
                 .then()
-                .statusCode(200) // Verify HTTP status code is 200
-                .body("id", equalTo(petId)) // Assert that the pet ID matches
+                .log().all()
+                .statusCode(200)
                 .extract()
                 .response();
 
-        System.out.println(response.asPrettyString());
+        assertThat(response.jsonPath().getInt("id")).isEqualTo(petId);
+    }
+
+    @Test
+    public void getPetById2() {
+
+        Long petId = 1L;
+
+        PetJson response = given()
+                .get(Endpoint.Pet.Get.findPetById(petId))
+                .then()
+                .extract()
+                .response()
+                .body().as(PetJson.class);
+
+        assertThat(response.getId()).isEqualTo(petId);
+    }
+
+    @Test
+    public void getPetById3() {
+
+        Long petId = 1L;
+
+        PetJson petById = petController.findPetById(petId);
+
+        assertThat(petById.getId()).isEqualTo(petId);
+    }
+
+    @Test
+    public void getPetByStatus() {
+
+        PetStatus status = available;
+
+        List<PetJson> pets = petController.findPetByStatus2(status);
+
+        pets.forEach(pet -> assertThat(pet.getStatus()).isEqualTo(status.name()));
     }
 }
