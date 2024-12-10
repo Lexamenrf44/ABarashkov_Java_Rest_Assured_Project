@@ -1,13 +1,24 @@
 package io.swagger.petstore.service;
 
-import io.swagger.petstore.dtos.pet.PetStatus;
-
 public class Endpoint {
 
     public static class Pet {
         public static class Get {
             public static String findPetById(Long petId) {return "/pet/" + petId;}
             public static String findPetByStatus() {return "/pet/findByStatus";}
+        }
+    }
+
+    public static class User {
+        public static class Get {
+            public static String findUserByUsername(String username) {return "/user/" + username;}
+        }
+    }
+
+    public static class Store {
+        public static class Get {
+            public static String getInventory() {return "/store/inventory";}
+            public static String getOrderByOrderId(Integer orderId) {return "/store/order/" + orderId;}
         }
     }
 }

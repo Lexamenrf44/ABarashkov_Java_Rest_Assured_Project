@@ -68,4 +68,19 @@ public class SimpleTests extends TestBase {
 
         pets.forEach(pet -> assertThat(pet.getStatus()).isEqualTo(status.name()));
     }
+
+    @Test
+    public void findUserByUsername() {
+        userController.findUserByUsername("user1");
+    }
+
+    @Test
+    public void getInventory() {
+        storeController.getInventory();
+    }
+
+    @Test
+    public void findOrderById() {
+        storeController.getOrderByOrderId(1);
+    }
 }
