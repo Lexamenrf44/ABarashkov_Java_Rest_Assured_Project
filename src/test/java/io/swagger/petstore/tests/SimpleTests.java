@@ -171,7 +171,7 @@ public class SimpleTests extends TestBase {
     }
 
     @Test
-    @CreateUser()
+    @CreateUser(userName = "SomeName1", firstName = "John", lastName = "Doe", email = "hello.world@test.com", phone = "+79994443311", password = "112233pass", cleanUp = false)
     public void deleteUserViaUsername() {
     }
 }
