@@ -22,7 +22,6 @@ public class CreateUserExtension implements BeforeEachCallback, ParameterResolve
         if (annotation.isPresent()) {
             CreateUser createUser = annotation.get();
 
-            // Set fields if they are not empty
             if (!createUser.userName().isEmpty()) {
                 user.setUsername(createUser.userName());
             }
