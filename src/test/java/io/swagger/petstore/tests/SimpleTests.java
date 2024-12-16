@@ -166,7 +166,12 @@ public class SimpleTests extends TestBase {
     }
 
     @Test
-    @CreateUser(username = "SomeUserName")
+    @CreateUser(userName = "SomeUserName")
     public void createUserWithAnnotationViaJsonUsernameSet(UserJson user) {
+    }
+
+    @Test
+    @CreateUser()
+    public void deleteUserViaUsername() {
     }
 }
