@@ -16,6 +16,9 @@ public class Endpoint {
         public static class Post {
             public static String createUser() {return "/user";}
         }
+        public static class Delete {
+            public static String deleteUserByUsername(String username) {return "/user/" + username;}
+        }
     }
 
     public static class Store {
