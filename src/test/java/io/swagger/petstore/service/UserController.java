@@ -16,6 +16,11 @@ public class UserController {
         return RestService.postAsResponse(Endpoint.User.Post.createUser(), user);
     }
 
+    @Step("Update User By Username")
+    public Response updateUserByUsername(String username, UserJson user) {
+        return RestService.putAsResponse(Endpoint.User.Put.updateUserByUsername(username), user);
+    }
+
     @Step("Delete User By Username")
     public Response deleteUserByUsername(String username) {
         return RestService.deleteAsResponse(Endpoint.User.Delete.deleteUserByUsername(username), UserJson.class);
