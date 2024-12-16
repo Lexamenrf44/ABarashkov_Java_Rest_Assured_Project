@@ -8,7 +8,7 @@ import org.junit.platform.commons.support.AnnotationSupport;
 
 import java.util.Optional;
 
-public class CreateUserExtension implements BeforeEachCallback, ParameterResolver {
+public class CreateUserExtension implements BeforeEachCallback, ParameterResolver, AfterEachCallback {
 
     private final UserController userController = new UserController();
     public static final ExtensionContext.Namespace NAMESPACE = ExtensionContext.Namespace.create(CreateUserExtension.class);
@@ -19,8 +19,8 @@ public class CreateUserExtension implements BeforeEachCallback, ParameterResolve
 
         UserJson user = JsonMapper.mapToJson("user", UserJson.class);
 
-        if (!annotation.get().username().isEmpty()) {
-            user.setUsername(annotation.get().username());
+        if (!annotation.get().userName().isEmpty()) {
+            user.setUsername(annotation.get().userName());
         }
 
         if (annotation.isPresent()) {
@@ -37,5 +37,17 @@ public class CreateUserExtension implements BeforeEachCallback, ParameterResolve
     @Override
     public UserJson resolveParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
         return extensionContext.getStore(NAMESPACE).get(extensionContext.getUniqueId(), UserJson.class);
+    }
+
+    @Override
+    public void afterEach(ExtensionContext context) throws Exception {
+        Optional<CreateUser> annotation = AnnotationSupport.findAnnotation(context.getRequiredTestMethod(), CreateUser.class);
+        if (annotation.isPresent() && annotation.get().cleanUp()) {
+            UserJson user = context.getStore(NAMESPACE).get(context.getUniqueId(), UserJson.class);
+
+            if (user != null && user.getUsername() != null) {
+                userController.deleteUserByUsername(user.getUsername());
+            }
+        }
     }
 }
