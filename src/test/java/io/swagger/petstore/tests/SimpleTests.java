@@ -21,6 +21,7 @@ import java.util.Map;
 import static io.restassured.RestAssured.given;
 import static io.swagger.petstore.dtos.pet.PetStatus.available;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class SimpleTests extends TestBase {
 
@@ -171,7 +172,33 @@ public class SimpleTests extends TestBase {
     }
 
     @Test
-    @CreateUser(userName = "SomeName1", firstName = "John", lastName = "Doe", email = "hello.world@test.com", phone = "+79994443311", password = "112233pass", cleanUp = false)
+    @CreateUser(cleanUp = false)
     public void deleteUserViaUsername() {
+        userController.findUserByUsername("madeleine.denesik");
+        userController.deleteUserByUsername("madeleine.denesik");
+    }
+
+    @Test
+    @CreateUser(userName = "ValidUser")
+    public void updateUserViaUsername() {
+        UserJson existingUser = userController.findUserByUsername("ValidUser");
+
+        UserJson updatedUser = UserJson.builder()
+                .id(existingUser.getId())
+                .username(existingUser.getUsername())
+                .firstName("Madeleine Updated")
+                .lastName("Denesik Updated")
+                .email("madeleine.updated@example.com")
+                .password("password3")
+                .phone("1234567890")
+                .userStatus(existingUser.getUserStatus())
+                .build();
+
+        userController.updateUserByUsername("ValidUser", updatedUser);
+
+        UserJson updatedUserFromApi = userController.findUserByUsername("ValidUser");
+        assertEquals(updatedUser.getFirstName(), updatedUserFromApi.getFirstName(), "First name not updated");
+        assertEquals(updatedUser.getLastName(), updatedUserFromApi.getLastName(), "Last name not updated");
+        assertEquals(updatedUser.getEmail(), updatedUserFromApi.getEmail(), "Email not updated");
     }
 }
