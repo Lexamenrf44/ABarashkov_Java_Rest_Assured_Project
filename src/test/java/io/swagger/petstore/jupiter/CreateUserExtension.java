@@ -19,11 +19,29 @@ public class CreateUserExtension implements BeforeEachCallback, ParameterResolve
 
         UserJson user = JsonMapper.mapToJson("user", UserJson.class);
 
-        if (!annotation.get().userName().isEmpty()) {
-            user.setUsername(annotation.get().userName());
-        }
-
         if (annotation.isPresent()) {
+            CreateUser createUser = annotation.get();
+
+            // Set fields if they are not empty
+            if (!createUser.userName().isEmpty()) {
+                user.setUsername(createUser.userName());
+            }
+            if (!createUser.firstName().isEmpty()) {
+                user.setFirstName(createUser.firstName());
+            }
+            if (!createUser.lastName().isEmpty()) {
+                user.setLastName(createUser.lastName());
+            }
+            if (!createUser.email().isEmpty()) {
+                user.setEmail(createUser.email());
+            }
+            if (!createUser.password().isEmpty()) {
+                user.setPassword(createUser.password());
+            }
+            if (!createUser.phone().isEmpty()) {
+                user.setPhone(createUser.phone());
+            }
+
             userController.createUser(user);
             context.getStore(NAMESPACE).put(context.getUniqueId(), user);
         }
