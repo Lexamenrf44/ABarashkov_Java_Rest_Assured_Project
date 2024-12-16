@@ -13,6 +13,9 @@ public class Endpoint {
         public static class Get {
             public static String findUserByUsername(String username) {return "/user/" + username;}
         }
+        public static class Post {
+            public static String createUser() {return "/user";}
+        }
     }
 
     public static class Store {
