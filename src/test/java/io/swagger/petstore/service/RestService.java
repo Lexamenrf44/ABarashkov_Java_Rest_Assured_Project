@@ -45,6 +45,15 @@ public class RestService {
                 .extract().response();
     }
 
+    @Step("PUT {endpoint}")
+    public static Response putAsResponse(String endpoint, Object body) {
+        return given()
+                .body(body)
+                .put(endpoint)
+                .then()
+                .extract().response();
+    }
+
     @Step("DELETE {endpoint}")
     public static Response deleteAsResponse(String endpoint, Object body) {
         return given()
