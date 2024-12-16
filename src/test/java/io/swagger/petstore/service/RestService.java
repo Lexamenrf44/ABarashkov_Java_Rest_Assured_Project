@@ -45,6 +45,15 @@ public class RestService {
                 .extract().response();
     }
 
+    @Step("DELETE {endpoint}")
+    public static Response deleteAsResponse(String endpoint, Object body) {
+        return given()
+                .body(body)
+                .delete(endpoint)
+                .then()
+                .extract().response();
+    }
+
     @Step("GET {endpoint}")
     public static <T> List<T> postAsListItems(String endpoint,
                                               Object body,
