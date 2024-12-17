@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 import static io.restassured.RestAssured.given;
+import static io.restassured.http.ContentType.MULTIPART;
 import static io.swagger.petstore.dtos.pet.PetStatus.available;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -200,5 +201,29 @@ public class SimpleTests extends TestBase {
         assertEquals(updatedUser.getFirstName(), updatedUserFromApi.getFirstName(), "First name not updated");
         assertEquals(updatedUser.getLastName(), updatedUserFromApi.getLastName(), "Last name not updated");
         assertEquals(updatedUser.getEmail(), updatedUserFromApi.getEmail(), "Email not updated");
+    }
+
+    @Test
+    public void uploadImageForPetByPetId() {
+        PetJson existingPet = petController.findPetById(1L);
+
+        File image = new File("src/test/resources/images/pet.png");
+
+        Response response = given().contentType(MULTIPART)
+                .multiPart("file", image, "image/png")
+                .post(Endpoint.Pet.Post.uploadPetImage(existingPet.getId()))
+                .then()
+                .extract().response();
+
+    }
+
+    @Test
+    public void uploadImageForPetByPetId2() {
+        PetJson existingPet = petController.findPetById(1L);
+
+        File image = new File("src/test/resources/images/pet.png");
+
+        petController.uploadPetImageByPetId(existingPet.getId(), image);
+
     }
 }

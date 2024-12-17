@@ -7,6 +7,9 @@ public class Endpoint {
             public static String findPetById(Long petId) {return "/pet/" + petId;}
             public static String findPetByStatus() {return "/pet/findByStatus";}
         }
+        public static class Post {
+            public static String uploadPetImage(Long petId) {return "/pet/" + petId + "/uploadImage";}
+        }
     }
 
     public static class User {

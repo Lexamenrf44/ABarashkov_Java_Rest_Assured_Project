@@ -3,10 +3,12 @@ package io.swagger.petstore.service;
 import io.qameta.allure.Step;
 import io.restassured.response.Response;
 
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 
 import static io.restassured.RestAssured.given;
+import static io.restassured.http.ContentType.MULTIPART;
 
 public class RestService {
 
@@ -83,5 +85,14 @@ public class RestService {
                 .post(endpoint)
                 .then()
                 .extract().body().jsonPath().getList(".", dtoClass);
+    }
+
+    @Step("POST {endpoint}")
+    public static Response uploadImageAsResponse(String endpoint, File file) {
+        return given().contentType(MULTIPART)
+                .multiPart("file", file, "image/png")
+                .post(endpoint)
+                .then()
+                .extract().response();
     }
 }
