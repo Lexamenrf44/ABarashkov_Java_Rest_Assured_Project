@@ -11,5 +11,11 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface CreateUser {
-    String username() default "";
+    String userName() default "";
+    String firstName() default "";
+    String lastName() default "";
+    String email() default "";
+    String password() default "";
+    String phone() default "";
+    boolean cleanUp() default true;
 }
